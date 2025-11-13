@@ -1,0 +1,20 @@
+# Node
+**/node_modules
+npm-debug.log*
+yarn-error.log*
+pnpm-lock.yaml
+
+# Env & secrets
+.env
+.env.*
+Backend/.env
+front-end/.env
+
+# Build outputs
+dist
+build
+
+# IDE / OS
+.vscode
+.idea
+.DS_Store

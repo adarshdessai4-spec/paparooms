@@ -7,6 +7,7 @@ import { useSearchParams } from 'react-router-dom';
 import PropertyCard from '../components/property/PropertyCard';
 import PropertyFilters from '../components/property/PropertyFilters';
 import { getLocalProperties } from '../services/propertyService';
+import MobileSearchOverlay from './MobileSearchOverlay';
 
 const DEFAULT_FILTERS = {
   city: '',
@@ -18,11 +19,25 @@ const DEFAULT_FILTERS = {
   workspace: false,
   wellness: false,
   near: false,
+  payAtHotel: false,
+  wizardOnly: false,
   priceMin: 300,
   priceMax: 8000,
 };
 
 const SearchPage = () => {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 768);
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
+
+  if (isMobile) {
+    return <MobileSearchOverlay />;
+  }
+
   const [searchParams] = useSearchParams();
   const [properties, setProperties] = useState([]);
   const [filteredProperties, setFilteredProperties] = useState([]);
@@ -44,6 +59,8 @@ const SearchPage = () => {
       workspace: searchParams.get('workspace') === 'true' || false,
       wellness: searchParams.get('wellness') === 'true' || false,
       near: searchParams.get('near') === 'true' || false,
+      payAtHotel: searchParams.get('payAtHotel') === 'true' || false,
+      wizardOnly: searchParams.get('wizardOnly') === 'true' || false,
       state: searchParams.get('state') || '',
       priceMin: parseInt(searchParams.get('priceMin') || '', 10) || DEFAULT_FILTERS.priceMin,
       priceMax: parseInt(searchParams.get('priceMax') || '', 10) || DEFAULT_FILTERS.priceMax,

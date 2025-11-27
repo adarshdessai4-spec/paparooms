@@ -4,6 +4,7 @@
 import React, { useEffect, useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import SearchForm from "../components/home/SearchForm";
+import MobileHero from "../components/home/MobileHero";
 import PropertyCard from "../components/property/PropertyCard";
 import { getLocalProperties } from "../services/propertyService";
 import { showToast } from "../components/common/Toast";
@@ -23,7 +24,7 @@ const HomePage = () => {
 
   const footerNav = [
     ['About Us', 'Teams / Careers', 'Blogs', 'Support'],
-    ['Official OYO Blog', 'Investor Relations', 'OYO Circle', 'OYO Frames'],
+    ['Official PAPA Rooms Blog', 'Investor Relations', 'PAPA Rooms Circle', 'PAPA Rooms Frames'],
     ['Terms and conditions', 'Guest Policies', 'Privacy Policy', 'Trust And Safety'],
     ['Cyber Security', 'Cyber Security Awareness', 'Responsible Disclosure', 'Advertise your Homes'],
   ];
@@ -122,6 +123,7 @@ const HomePage = () => {
 
   return (
     <div data-page="home">
+      <MobileHero />
       <main id="main-content">
         <section className="oyo-hero">
           <div className="oyo-hero__inner">
@@ -152,7 +154,7 @@ const HomePage = () => {
         <section className="oyo-banner" aria-label="Current offer">
           <div className="oyo-banner__card">
             <div className="promo-qr">
-              <img src="/qr-oyoplus.svg" alt="Scan to download the OYO app" />
+              <img src="/qr-oyoplus.svg" alt="Scan to download the PAPA Rooms app" />
               <p>Scan to download the App</p>
             </div>
             <div className="promo-copy">
@@ -170,48 +172,6 @@ const HomePage = () => {
             <h2 id="explore-destinations-title" className="font-bold">Explore your next destination</h2>
           </div>
           <div className="explore-track" role="list" data-slot="explore-track" />
-        </section>
-
-        {/* Metrics */}
-        <section className="metrics" aria-labelledby="global-presence">
-          <div className="metrics-visual">
-            <div className="world-map" />
-          </div>
-          <div className="metrics-copy">
-            <h2 id="global-presence" className="font-bold">There’s an OYO.plus around. Always.</h2>
-            <p>More destinations. More ease. More affordable stays built for every journey, with vision explore India.</p>
-            <div className="metric-stats" aria-label="Global stats">
-              <div>
-                <strong>22+</strong>
-                <span>States</span>
-              </div>
-              <div>
-                <strong>50,000+</strong>
-                <span>Hotels &amp; homes</span>
-              </div>
-            </div>
-            <ul className="metric-list">
-              {[
-                { label: "Gujarat", dot: "dot-green" },
-                { label: "Goa", dot: "dot-red" },
-                { label: "Bengaluru", dot: "dot-yellow" },
-                { label: "Kerala", dot: "dot-blue" },
-                { label: "Assam", dot: "dot-purple" },
-                { label: "Manali", dot: "dot-pink" },
-              ].map((m) => (
-                <li key={m.label}>
-                  <button
-                    className="metric-link"
-                    type="button"
-                    onClick={() => handleSearch({ city: m.label })}
-                  >
-                    <span className={`dot ${m.dot}`} />
-                    {m.label}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
         </section>
 
         {/* Search Results */}
@@ -243,7 +203,6 @@ const HomePage = () => {
         <section className="premium-banner">
           <div className="premium-banner__image" role="presentation" />
           <div className="premium-banner__copy">
-            <span className="badge">Company-Serviced</span>
             <h2>India's no.1 premium value hotels</h2>
             <ul>
               <li>Assured Check-in</li>
@@ -289,7 +248,7 @@ const HomePage = () => {
             />
           </div>
           <div className="global-reach__copy">
-            <p className="eyebrow">There's an OYO around. Always.</p>
+            <p className="eyebrow">There's an PAPA Rooms around. Always.</p>
             <h2>More destinations. More ease. More affordable.</h2>
             <p>Plan business trips, weekend breaks, or workations with curated stays available in major countries.</p>
             <div className="global-stats">
@@ -343,7 +302,7 @@ const HomePage = () => {
         <section className="oyo-directory">
           <div className="directory-top">
             <div>
-              <p className="eyebrow">OYO</p>
+              <p className="eyebrow">PAPA Rooms</p>
               <h2>World's leading chain of hotels and homes</h2>
             </div>
             <button type="button" className="btn secondary">List your property</button>
@@ -360,7 +319,7 @@ const HomePage = () => {
             ))}
           </div>
           <div className="directory-hotels">
-            <h3>OYO Hotels</h3>
+            <h3>PAPA Rooms Hotels</h3>
             <div className="directory-hotels__grid">
               {hotelColumns.map((column, idx) => (
                 <ul key={`hotel-col-${idx}`}>

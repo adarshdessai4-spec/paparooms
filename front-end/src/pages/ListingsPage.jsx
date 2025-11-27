@@ -27,7 +27,7 @@ const toPropertyCardModel = (l) => ({
   area:    l.address?.line1 || '',
   city:    l.address?.city || '',
   type:    'Hotel',
-  badge:   l.status ? `${l.status} • OYO.plus` : undefined,
+  badge:   l.status ? `${l.status} • PAPA Rooms` : undefined,
   amenities: l.amenities || [],
   price:   l.price ?? null,
   currency: "INR",
@@ -45,6 +45,8 @@ const DEFAULT_FILTERS = {
   workspace: false,
   wellness: false,
   near: false,
+  payAtHotel: false,
+  wizardOnly: false,
   priceMin: 300,
   priceMax: 8000,
 };
@@ -99,6 +101,8 @@ const ListingsPage = () => {
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [sort, setSort] = useState("relevance");
+  const [showFilterSheet, setShowFilterSheet] = useState(false);
+  const [showSortSheet, setShowSortSheet] = useState(false);
 
   const mapLocalProperty = useCallback((p) => ({
     id: p.id || p._id,
@@ -298,8 +302,8 @@ const ListingsPage = () => {
     ? "Fetching curated stays near you..."
     : `${stayLabel} open for your dates in ${displayCity}.`;
   const totalOyOs = properties.length || sorted.length;
-  const heroHeading = filters.city ? `Hotels in ${displayCity}` : "Find an OYO.plus stay that fits every plan";
-  const heroCount = filters.city ? `(${totalOyOs} OYOs)` : "";
+  const heroHeading = filters.city ? `Hotels in ${displayCity}` : "Find an PAPA Rooms stay that fits every plan";
+  const heroCount = filters.city ? `(${totalOyOs} PAPA Rooms)` : "";
 
   return (
     <div data-page="listings" className="listings-page">
@@ -381,6 +385,25 @@ const ListingsPage = () => {
               </div>
             )}
 
+            <div className="results-toolbar">
+              <button type="button" className="toolbar-btn" onClick={() => setShowFilterSheet(true)}>
+                <span aria-hidden="true">☰</span>
+                Filter
+              </button>
+              <button type="button" className="toolbar-btn" onClick={() => setShowSortSheet(true)}>
+                <span aria-hidden="true">⇅</span>
+                Sort
+              </button>
+              <button
+                type="button"
+                className="toolbar-btn"
+                onClick={() => alert("Map view coming soon")}
+              >
+                <span aria-hidden="true">🗺</span>
+                Map
+              </button>
+            </div>
+
             <p className="muted mt-4" id="listing-message" role="status" aria-live="polite">
               {sorted.length > 0 && !loading
                 ? "Showing the best matches based on your filters."
@@ -391,6 +414,55 @@ const ListingsPage = () => {
           </section>
         </div>
       </main>
+
+      {showFilterSheet && (
+        <div className="filter-overlay" role="dialog" aria-modal="true">
+          <div className="filter-overlay__bg" onClick={() => setShowFilterSheet(false)} />
+          <PropertyFilters
+            variant="sheet"
+            filters={filters}
+            onFiltersChange={handleFiltersChange}
+            onClose={() => setShowFilterSheet(false)}
+            onApply={() => setShowFilterSheet(false)}
+          />
+        </div>
+      )}
+
+      {showSortSheet && (
+        <div className="filter-overlay" role="dialog" aria-modal="true">
+          <div className="filter-overlay__bg" onClick={() => setShowSortSheet(false)} />
+          <div className="sort-sheet">
+            <header>
+              <button type="button" onClick={() => setShowSortSheet(false)}>
+                ×
+              </button>
+              <span>Sort by</span>
+              <div />
+            </header>
+            <ul>
+              {[
+                { value: "relevance", label: "Recommended" },
+                { value: "price-low", label: "Price: Low to High" },
+                { value: "price-high", label: "Price: High to Low" },
+                { value: "rating", label: "Rating: High to Low" },
+              ].map((option) => (
+                <li key={option.value}>
+                  <button
+                    type="button"
+                    className={sort === option.value ? "active" : ""}
+                    onClick={() => {
+                      setSort(option.value);
+                      setShowSortSheet(false);
+                    }}
+                  >
+                    {option.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

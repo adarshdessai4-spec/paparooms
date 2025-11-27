@@ -72,7 +72,7 @@ const App: React.FC = () => {
           <header className="flex items-center justify-between px-5 pt-6 pb-3">
             <div />
             <div className="text-2xl font-extrabold tracking-[0.6em]">
-              OYO
+              PAPA Rooms
             </div>
             <div className="flex items-center gap-5">
               <button

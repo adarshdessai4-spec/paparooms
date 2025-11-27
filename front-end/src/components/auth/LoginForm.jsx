@@ -198,7 +198,7 @@ const LoginForm = ({ isActive }) => {
       </div>
 
       <button className="btn primary full" type="submit" disabled={loading}>
-        {loading ? "Logging in..." : "Login to OYO.plus"}
+        {loading ? "Logging in..." : "Login to PAPA Rooms"}
       </button>
 
       <div

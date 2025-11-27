@@ -1,5 +1,5 @@
-import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom';
 
 import HomePage from './pages/HomePage';
 import AuthPage from './pages/AuthPage';
@@ -12,6 +12,11 @@ import CorporatePage from './pages/CorporatePage';
 import SupportPage from './pages/SupportPage';
 import OffersPage from './pages/OffersPage';
 import SearchPage from './pages/SearchPage';
+import MobileSearchOverlay from './pages/MobileSearchOverlay';
+import MobileBookingsPrompt from './pages/MobileBookingsPrompt';
+import MobileAccountPage from './pages/MobileAccountPage';
+import MobileCityLocalities from './pages/MobileCityLocalities';
+import MobileCityHotels from './pages/MobileCityHotels';
 
 import CreateListingPage from './pages/CreateListingPage';
 import EditListingPage from './pages/EditListingPage';
@@ -45,6 +50,20 @@ function RequireOwner({ children }) {
 }
 
 function App() {
+  const location = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: 'auto',
+    });
+    const main = document.getElementById('main-content');
+    if (main) {
+      main.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+    }
+  }, [location.pathname]);
+
   return (
     <div className="App">
       <Header />
@@ -134,6 +153,11 @@ function App() {
           <Route path={ROUTES.SUPPORT} element={<SupportPage />} />
           <Route path={ROUTES.OFFERS} element={<OffersPage />} />
           <Route path={ROUTES.SEARCH} element={<SearchPage />} />
+          <Route path={ROUTES.MOBILE_SEARCH} element={<MobileSearchOverlay />} />
+          <Route path={ROUTES.MOBILE_BOOKINGS} element={<MobileBookingsPrompt />} />
+          <Route path={ROUTES.MOBILE_ACCOUNT} element={<MobileAccountPage />} />
+          <Route path={ROUTES.CITY_LOCALITIES} element={<MobileCityLocalities />} />
+          <Route path={ROUTES.CITY_HOTELS} element={<MobileCityHotels />} />
 
           <Route
             path={ROUTES.BECAMEAMEMBER}

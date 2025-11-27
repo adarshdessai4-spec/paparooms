@@ -12,7 +12,7 @@ const Footer = () => {
     <footer className="site-footer" id="support">
       <div className="footer-columns">
         <div>
-          <h4>OYO.plus</h4>
+          <h4>PAPA Rooms</h4>
           <p>
             Leading travel technology platform that makes staying easy, affordable, and dependable.
           </p>
@@ -50,7 +50,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <span>&copy; {new Date().getFullYear()} OYO.plus</span>
+        <span>&copy; {new Date().getFullYear()} PAPA Rooms</span>
         <div className="policy-links">
           <a href="#" rel="noopener">Terms</a>
           <a href="#" rel="noopener">Privacy</a>

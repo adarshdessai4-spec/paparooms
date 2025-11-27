@@ -12,15 +12,15 @@ export default function AuthPage() {
       <section className="auth-page__content">
         <div className="auth-hero-copy">
           <p className="auth-hero-copy__eyebrow">Hotels and homes across 800 cities, 24+ countries</p>
-          <h1>There’s a smarter way to OYO around</h1>
+          <h1>There’s a smarter way to PAPA Rooms around</h1>
           <p>
-            Sign up with your phone number and get exclusive access to discounts and savings on OYO stays
+            Sign up with your phone number and get exclusive access to discounts and savings on PAPA Rooms stays
             and with our many travel partners.
           </p>
         </div>
 
         <div className="auth-panel" data-auth>
-          <div className="auth-panel__offer">Sign up &amp; Get ₹500 OYO Money</div>
+          <div className="auth-panel__offer">Sign up &amp; Get ₹500 PAPA Rooms Money</div>
           <h2>Login / Signup</h2>
           <p className="auth-panel__subtitle">Choose how you want to continue</p>
 

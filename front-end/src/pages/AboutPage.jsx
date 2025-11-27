@@ -17,7 +17,7 @@ const MILESTONES = [
   { year: "2018", title: "Founding", text: "Launched with a mission to standardize budget stays." },
   { year: "2020", title: "Quality bar", text: "Rolled out property verification & hygiene audits." },
   { year: "2022", title: "Work-ready", text: "Introduced remote-ready rooms and long-stay plans." },
-  { year: "2024", title: "OYO.plus", text: "Curated, verified stays across India’s top cities." },
+  { year: "2024", title: "PAPA Rooms", text: "Curated, verified stays across India’s top cities." },
 ];
 
 const CULTURE = [
@@ -39,7 +39,7 @@ const AboutPage = () => {
           <p className="eyebrow accent">Our story</p>
           <h1>We make reliable stays accessible to everyone who loves to travel</h1>
           <p>
-            OYO.plus is a hospitality technology platform that partners with independent hotels and
+            PAPA Rooms is a hospitality technology platform that partners with independent hotels and
             homeowners across India to deliver consistent, quality stays in every major state.
           </p>
         </section>
@@ -70,7 +70,7 @@ const AboutPage = () => {
         {/* Milestones */}
         <section>
           <div className="section-head">
-            <h2>Milestones that shaped OYO.plus</h2>
+            <h2>Milestones that shaped PAPA Rooms</h2>
           </div>
           <div className="timeline" data-slot="about-timeline">
             {MILESTONES.map((m) => (
@@ -90,7 +90,7 @@ const AboutPage = () => {
         {/* Careers / Culture */}
         <section id="careers">
           <div className="section-head">
-            <h2>Life at OYO.plus</h2>
+            <h2>Life at PAPA Rooms</h2>
             <a className="link" href="#careers-open-roles">
               View open roles
             </a>

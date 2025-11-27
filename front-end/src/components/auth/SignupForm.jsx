@@ -239,12 +239,12 @@ const SignupForm = ({ isActive }) => {
           disabled={loading}
           required
         />
-        I agree to the OYO.plus <a href="#">Terms</a> &{" "}
+        I agree to the PAPA Rooms <a href="#">Terms</a> &{" "}
         <a href="#">Privacy Policy</a>
       </label>
 
       <button className="btn primary full" type="submit" disabled={loading}>
-        {loading ? "Creating account..." : "Join OYO.plus"}
+        {loading ? "Creating account..." : "Join PAPA Rooms"}
       </button>
 
       <div

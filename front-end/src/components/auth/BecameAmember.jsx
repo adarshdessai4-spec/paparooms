@@ -166,7 +166,7 @@ const BecameAmember = () => {
           <span className="inline-flex items-center justify-center font-bold text-[10px] leading-none bg-white text-rose-600 border border-rose-300 rounded-full w-5 h-5">
             OY
           </span>
-          <span>OYO.plus Membership</span>
+          <span>PAPA Rooms Membership</span>
         </div>
 
         {/* heading */}

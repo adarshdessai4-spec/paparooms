@@ -10,6 +10,8 @@ const DEFAULT_FILTERS = {
   workspace: false,
   wellness: false,
   near: false,
+  payAtHotel: false,
+  wizardOnly: false,
   priceMin: 300,
   priceMax: 8000,
 };
@@ -28,24 +30,24 @@ const POPULAR_LOCATIONS = ['Majestic', 'Koramangala', 'Marathahalli', 'HSR Layou
 
 const STATIC_SECTIONS = [
   {
-    id: 'collections',
-    title: 'Collections',
-    options: ['Family OYOs', 'Your friendly neighbourhood stay', 'For Group Travellers', 'Local ID accepted', 'OYO welcomes couples'],
-  },
-  {
-    id: 'categories',
-    title: 'Categories',
-    options: ['OYO Rooms', 'Premium', 'Townhouse', 'Flagship', 'Home'],
+    id: 'oyoType',
+    title: 'OYO Type',
+    options: ['PAPA Rooms', 'Premium', 'Townhouse', 'Flagship', 'Home', 'Capital O', 'Collection O', 'Spot On', 'Townhouse Oak'],
   },
   {
     id: 'accommodation',
     title: 'Accommodation Type',
-    options: ['OYO Home', 'Hotel'],
+    options: ['PAPA Rooms Home', 'Hotel'],
   },
   {
     id: 'facilities',
     title: 'Hotel Facilities',
     options: ['Seating area', 'King Sized Bed', 'Queen Sized Bed', 'Mini Fridge', 'TV'],
+  },
+  {
+    id: 'collections',
+    title: 'Collections',
+    options: ['Family PAPA Rooms', 'Your friendly neighbourhood stay'],
   },
 ];
 
@@ -56,6 +58,8 @@ const PropertyFilters = ({
   onFilterChange,
   variant = 'card',
   className = '',
+  onClose,
+  onApply,
 }) => {
   const isControlled = typeof controlledFilters !== 'undefined';
   const [localFilters, setLocalFilters] = useState(() =>
@@ -115,82 +119,78 @@ const PropertyFilters = ({
     });
   }, [initialFilters, isControlled]);
 
-  const classes = ['filter-card'];
-  if (variant === 'sidebar') classes.push('filter-card--sidebar');
-  if (className) classes.push(className);
+  const handleApply = () => {
+    onApply?.(filters);
+    onClose?.();
+  };
 
-  return (
-    <div className={classes.join(' ')}>
-      <div className="filter-grid">
-        <div className="field">
-          <label htmlFor="filter-city">Popular locations in {filters.city || 'Bangalore'}</label>
-          <input
-            id="filter-city"
-            name="city"
-            type="text"
-            placeholder="Search locality"
-            value={filters.city}
-            onChange={handleChange}
-          />
-          <div className="chip-row">
-            {POPULAR_LOCATIONS.map((chip) => (
-              <button
-                key={chip}
-                type="button"
-                className={`chip ${filters.city === chip ? 'chip--active' : ''}`}
-                onClick={() => handleChipClick(chip)}
-              >
-                {chip}
-              </button>
-            ))}
+  const baseContent = (
+    <>
+      <div className="filter-fieldset">
+        <label htmlFor="filter-city">Location</label>
+        <input
+          id="filter-city"
+          name="city"
+          type="text"
+          placeholder="Search city or locality"
+          value={filters.city}
+          onChange={handleChange}
+        />
+        <div className="chip-row">
+          {POPULAR_LOCATIONS.map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              className={`chip ${filters.city === chip ? 'chip--active' : ''}`}
+              onClick={() => handleChipClick(chip)}
+            >
+              {chip}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="filter-toggle">
+        <label className="checkbox detail">
+          <input type="checkbox" name="payAtHotel" checked={filters.payAtHotel} onChange={handleChange} />
+          <div>
+            <span>Pay at Hotel</span>
+            <small>Pay during check-in</small>
           </div>
-        </div>
-        <div className="field">
-          <label htmlFor="filter-guests">Guests</label>
-          <select id="filter-guests" name="guests" value={filters.guests} onChange={handleChange}>
-            <option value="">Any</option>
-            <option value="1">1 guest</option>
-            <option value="2">2 guests</option>
-            <option value="3">3 guests</option>
-            <option value="4">4 guests</option>
-            <option value="5">5+ guests</option>
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="filter-budget">Budget</label>
-          <select id="filter-budget" name="budget" value={filters.budget} onChange={handleChange}>
-            <option value="any">Any budget</option>
-            <option value="1500">Under ₹1,500</option>
-            <option value="3000">₹1,500 - ₹3,000</option>
-            <option value="5000">₹3,000 - ₹5,000</option>
-            <option value="5000+">Above ₹5,000</option>
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="filter-type">Property type</label>
-          <select id="filter-type" name="type" value={filters.type} onChange={handleChange}>
-            <option value="any">Any type</option>
-            <option value="hotel">Hotel</option>
-            <option value="villa">Villa</option>
-            <option value="apartment">Apartment</option>
-            <option value="hostel">Hostel</option>
-            <option value="resort">Resort</option>
-          </select>
-        </div>
-        <div className="field">
-          <label htmlFor="filter-rating">Minimum rating</label>
-          <select id="filter-rating" name="rating" value={filters.rating} onChange={handleChange}>
-            <option value="any">Any rating</option>
-            <option value="4.0">4.0+ stars</option>
-            <option value="4.5">4.5+ stars</option>
-            <option value="4.8">4.8+ stars</option>
-          </select>
-        </div>
+        </label>
+        <label className="checkbox detail">
+          <input type="checkbox" name="wizardOnly" checked={filters.wizardOnly} onChange={handleChange} />
+          <div>
+            <span>Show Only Wizard Member OYOs</span>
+            <small>Get 5% off on member hotels</small>
+          </div>
+        </label>
+        <label className="checkbox detail">
+          <input type="checkbox" name="workspace" checked={filters.workspace} onChange={handleChange} />
+          <div>
+            <span>Remote-ready workspace</span>
+            <small>Desk, chair &amp; Wi-Fi</small>
+          </div>
+        </label>
+        <label className="checkbox detail">
+          <input type="checkbox" name="wellness" checked={filters.wellness} onChange={handleChange} />
+          <div>
+            <span>Wellness amenities</span>
+            <small>Spa, pool &amp; more</small>
+          </div>
+        </label>
+        <label className="checkbox detail">
+          <input type="checkbox" name="near" checked={filters.near} onChange={handleChange} />
+          <div>
+            <span>Sort by distance</span>
+            <small>Show closest stays first</small>
+          </div>
+        </label>
       </div>
 
       <div className="price-slider">
         <div className="slider-header">
-          <span>Price</span>
+          <span>Price (excl. taxes & fee)</span>
           <strong>
             ₹{priceMinValue} &ndash; ₹{priceMaxValue}
           </strong>
@@ -217,30 +217,14 @@ const PropertyFilters = ({
         </div>
       </div>
 
-      <div className="checkbox-group">
-        <label className="checkbox">
-          <input type="checkbox" name="workspace" checked={filters.workspace} onChange={handleChange} />
-          Remote-ready workspace
-        </label>
-        <label className="checkbox">
-          <input type="checkbox" name="wellness" checked={filters.wellness} onChange={handleChange} />
-          Wellness amenities
-        </label>
-        <label className="checkbox">
-          <input type="checkbox" name="near" checked={filters.near} onChange={handleChange} />
-          Sort by distance
-        </label>
-      </div>
-
       {STATIC_SECTIONS.map((section) => (
         <div className="filter-section" key={section.id}>
           <div className="filter-section__head">
             <span>{section.title}</span>
-            <button type="button" className="link-btn">+ View More</button>
           </div>
           <div className="filter-section__options">
             {section.options.map((label, idx) => (
-              <label key={label} className="checkbox">
+              <label key={label} className="checkbox simple">
                 <input type="checkbox" name={`${section.id}-${idx}`} />
                 {label}
               </label>
@@ -248,13 +232,38 @@ const PropertyFilters = ({
           </div>
         </div>
       ))}
+    </>
+  );
 
-      <div className="wizard-card">
-        <strong>Wizard Member OYOs</strong>
-        <p>Get 5% off on member hotels</p>
-        <button type="button" className="btn ghost">Know more</button>
+  if (variant === 'sheet') {
+    return (
+      <div className={`filter-sheet ${className}`}>
+        <header className="filter-sheet__header">
+          <button type="button" className="sheet-close" onClick={onClose} aria-label="Close filters">
+            ×
+          </button>
+          <span>Filters</span>
+          <button type="button" className="sheet-clear" onClick={handleReset}>
+            Clear all
+          </button>
+        </header>
+        <div className="filter-sheet__body">{baseContent}</div>
+        <div className="filter-sheet__footer">
+          <button type="button" className="btn primary" onClick={handleApply}>
+            Apply
+          </button>
+        </div>
       </div>
+    );
+  }
 
+  const classes = ['filter-card'];
+  if (variant === 'sidebar') classes.push('filter-card--sidebar');
+  if (className) classes.push(className);
+
+  return (
+    <div className={classes.join(' ')}>
+      {baseContent}
       <div className="filter-actions">
         <button type="button" className="btn ghost" onClick={handleReset}>
           Reset filters

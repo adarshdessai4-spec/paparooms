@@ -133,10 +133,10 @@ const CorporatePage = () => {
       <main className="page corporate">
         {/* Hero */}
         <section className="page-hero">
-          <p className="eyebrow accent">OYO.plus for Business</p>
-          <h1>Power your company's travel with OYO.plus stays</h1>
+          <p className="eyebrow accent">PAPA Rooms for Business</p>
+          <h1>Power your company's travel with PAPA Rooms stays</h1>
           <p>
-            Unlock centralised billing, negotiated rates, and 24x7 support across 7,500+ OYO.plus
+            Unlock centralised billing, negotiated rates, and 24x7 support across 7,500+ PAPA Rooms
             verified hotels, homes, and serviced apartments.
           </p>
           <div className="store-links">

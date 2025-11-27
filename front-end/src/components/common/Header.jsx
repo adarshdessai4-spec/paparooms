@@ -2,40 +2,13 @@ import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { getUserInitials } from '../../utils/formatters';
-import logo from '../../../public/oyo-plus-logo.png';
-
-const LS_AUTH_KEY = 'oyoplus:isAuthed';
-const LS_USER_KEY = 'oyoplus:user';
-
-const PRIMARY_ACTIONS = [
-  {
-    label: 'Become a Member',
-    description: 'Additional 10% off on stays',
-    to: '/became-a-member',
-  },
-  {
-    label: 'OYO for Business',
-    description: 'Trusted by 5000 Corporates',
-    to: '/corporate',
-  },
-  {
-    label: 'List your property',
-    description: 'Start earning in 30 mins',
-    to: '/became-a-member-host',
-  },
-];
-
-const CITY_LINKS = [
-  'Bangalore',
-  'Chennai',
-  'Delhi',
-  'Gurgaon',
-  'Hyderabad',
-  'Kolkata',
-  'Mumbai',
-  'Noida',
-  'Pune',
-];
+import {
+  CITY_LINKS,
+  CONTACT_NUMBER,
+  LS_AUTH_KEY,
+  LS_USER_KEY,
+  PRIMARY_ACTIONS,
+} from '../../constants/menu';
 
 const Header = () => {
   const { isAuthenticated, user, logout } = useAuth();
@@ -55,6 +28,7 @@ const Header = () => {
   );
   const [localUser, setLocalUser] = useState(readLocalUser);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const isAuthed = isAuthenticated || localAuthed;
   const displayUser = user || localUser;
@@ -73,9 +47,21 @@ const Header = () => {
 
   useEffect(() => {
     setIsUserMenuOpen(false);
+    setIsMobileMenuOpen(false);
     setLocalAuthed(localStorage.getItem(LS_AUTH_KEY) === 'true');
     setLocalUser(readLocalUser());
   }, [location.pathname, location.search, location.hash]);
+
+  useEffect(() => {
+    const handler = () => {
+      if (window.innerWidth > 768) {
+        setIsMobileMenuOpen(false);
+      }
+    };
+
+    window.addEventListener('resize', handler);
+    return () => window.removeEventListener('resize', handler);
+  }, []);
 
   useEffect(() => {
     const onDocClick = (e) => {
@@ -131,17 +117,30 @@ const Header = () => {
       <header className="oyo-header">
         <div className="oyo-header__top">
           <div className="oyo-brand-cluster">
-            <Link className="oyo-mark" to="/" aria-label="OYO home">
-              OYO
+            <Link className="oyo-mark" to="/" aria-label="PAPA home">
+              <img src="/brand-logo.png" alt="PAPA Rooms" />
             </Link>
-            <span className="oyo-divider" aria-hidden="true" />
-            <span className="oyo-submark" aria-label="Hotels collection">
-              W
-            </span>
-            <span className="sr-only">Wanderlust collection</span>
           </div>
 
-          <div className="oyo-top-right">
+          <button
+            type="button"
+            className="mobile-menu-toggle"
+            aria-expanded={isMobileMenuOpen}
+            aria-controls="oyo-header-menu"
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+          >
+            <span className="sr-only">Toggle navigation</span>
+            <span className="mobile-menu-toggle__icon" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
+          </button>
+
+          <div
+            id="oyo-header-menu"
+            className={`oyo-top-right${isMobileMenuOpen ? ' is-open' : ''}`}
+          >
             <nav aria-label="Primary actions" className="oyo-primary-links">
               {PRIMARY_ACTIONS.map((action) => (
                 <Link key={action.label} to={action.to} className="primary-link">
@@ -152,12 +151,12 @@ const Header = () => {
             </nav>
 
             <div className="oyo-header__meta">
-              <a className="contact-link" href="tel:01246201611">
+              <a className="contact-link" href={`tel:${CONTACT_NUMBER.replace(/-/g, '')}`}>
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.86 19.86 0 0 1 3.11 5.18 2 2 0 0 1 5.11 3h3a2 2 0 0 1 2 1.72c.12.86.34 1.7.65 2.49a2 2 0 0 1-.45 2.11l-1.27 1.27a16 16 0 0 0 6.86 6.86l1.27-1.27a2 2 0 0 1 2.11-.45c.79.31 1.63.53 2.49.65A2 2 0 0 1 22 16.92Z" />
                 </svg>
                 <span>
-                  0124-6201611
+                  {CONTACT_NUMBER}
                   <small>Call us to Book now</small>
                 </span>
               </a>

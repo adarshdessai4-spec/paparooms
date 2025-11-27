@@ -15,7 +15,7 @@ import { useAuth } from '../contexts/AuthContext';
 import useEmblaCarousel from 'embla-carousel-react';
 import Autoplay from 'embla-carousel-autoplay';
 
-/* -------------------- OYO-style Embla Carousel -------------------- */
+/* -------------------- PAPA Rooms-style Embla Carousel -------------------- */
 function EmblaOyo({ images = [], title = '' }) {
   const [index, setIndex] = useState(0);
   const [lightbox, setLightbox] = useState(false);
@@ -488,7 +488,7 @@ const RoomRow = ({ room }) => {
 
         {/* About / Description */}
         <div className="text-gray-700 flex flex-col gap-2.5">
-          <span className="text-2xl font-bold text-black">About this OYO</span>
+          <span className="text-2xl font-bold text-black">About this PAPA Rooms</span>
 
           {/* NEW: teaser/full text with toggle */}
           <p

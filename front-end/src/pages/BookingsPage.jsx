@@ -110,7 +110,7 @@ const BookingsPage = () => {
       {/* Page header (hero-ish, matches HTML tone) */}
       <header className="search-page__header">
         <h1>Your upcoming stays</h1>
-        <p>View, modify, or manage every booking you’ve made with OYO.plus.</p>
+        <p>View, modify, or manage every booking you’ve made with PAPA Rooms.</p>
       </header>
 
       {/* Filters */}
@@ -172,7 +172,7 @@ const BookingsPage = () => {
           </section>
 
           <section className="bookings-benefits">
-            <h2>Why book with OYO.plus?</h2>
+            <h2>Why book with PAPA Rooms?</h2>
             <ul>
               <li>Instant refunds on cancellations via the app.</li>
               <li>Priority support from your dedicated concierge.</li>

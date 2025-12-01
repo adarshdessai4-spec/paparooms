@@ -19,13 +19,14 @@ const generateToken = (userId) => {
   );
 };
 
+const isProd = process.env.NODE_ENV === 'production';
 const setCookie = (res, token) => {
   res.cookie("token", token, {
-  httpOnly: true,
-  secure: true,          // ✅ required for cross-site
-  sameSite: "None",      // ✅ allows local → https backend
-  maxAge: 7 * 24 * 60 * 60 * 1000
-});
+    httpOnly: true,
+    secure: isProd,                 // allow localhost over http in dev
+    sameSite: isProd ? "None" : "Lax",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  });
 };
 
 
@@ -90,12 +91,12 @@ export const signupUser = async (req, res) => {
     // ✅ Send welcome email via Resend
     await sendEmail({
       to: email,
-      subject: "Welcome to OYO.plus!", 
+      subject: "Welcome to PapRooms!", 
       html: `
-      <h2>Welcome to OYO.plus!</h2>
+      <h2>Welcome to PapRooms!</h2>
       <p>Hi ${name},</p>
       <p>Thank you for creating an account with us. We're excited to have you on board!</p>
-      <p>Best regards,<br>The OYO.plus Team</p>
+      <p>Best regards,<br>The PapRooms Team</p>
       `,
     });
 
@@ -106,6 +107,7 @@ export const signupUser = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "Account created. OTP sent to email.",
+      token,
       user: {
         id: user._id,
         name: user.name,
@@ -200,6 +202,7 @@ export const googleAuthLogin = async (req, res) => {
       message,
       isNewUser,
       wasLinked,
+      token: accessToken,
       user: { 
         id: user._id,
         name: user.name, 
@@ -287,6 +290,7 @@ export const loginUser = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Login successful',
+      token,
       user: {
         id: user._id,
         name: user.name,
@@ -472,9 +476,6 @@ export const resetPassword = async (req, res) => {
     res.status(500).json({ success: false, message: "Server error" });
   }
 }
-
-
-
 
 
 

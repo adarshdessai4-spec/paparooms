@@ -18,6 +18,7 @@ import uploadRoutes from './routes/upload.js';
 import kycRoutes from './routes/kyc.js';
 import bookingRoutes from './routes/booking.js'
 import paymentRoutes from './routes/payment.js';
+import ensureDefaultAccounts from './utils/ensureDefaultAccounts.js';
 
 // Resolve __dirname in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -29,19 +30,48 @@ dotenv.config();
 // Initialize express
 const app = express();
 
-// --- Database
-connectDB();
+// --- Database & bootstrap
+connectDB()
+  .then(() => ensureDefaultAccounts())
+  .catch((err) => console.error('Bootstrap error:', err));
 
 // --- CORS (cookies + multiple fronts)
+const allowedOrigins = new Set([
+  'https://oyo-plus-test-front-end.onrender.com',
+  'http://localhost:5173',
+  'http://127.0.0.1:5173',
+  'http://localhost:4173',
+  'http://127.0.0.1:4173',
+  'http://localhost:3000',
+  'http://127.0.0.1:3000',
+  'http://localhost:5180',
+  'http://127.0.0.1:5180',
+  // Common Docker/WSL bridge IPs used by Vite previews
+  'http://172.17.0.1:5173',
+  'http://172.17.0.1:5180',
+]);
+
+// Accept other RFC1918 / loopback hosts for local dev without throwing CORS 500s
+const allowPrivateNetwork = (origin) => {
+  if (!origin) return false;
+  return /^https?:\/\/(localhost|127\.0\.0\.1|0\.0\.0\.0|10\.\d{1,3}\.\d{1,3}\.\d{1,3}|172\.(1[6-9]|2[0-9]|3[0-1])\.\d{1,3}\.\d{1,3}|192\.168\.\d{1,3}\.\d{1,3})(:\d+)?$/.test(
+    origin
+  );
+};
+
 const corsOptions = {
-  origin: [
-    'https://oyo-plus-test-front-end.onrender.com',
-    'http://localhost:5173',
-    'http://127.0.0.1:5173',
-  ],
+  origin: (origin, callback) => {
+    if (!origin) return callback(null, true); // mobile apps / curl
+    if (allowedOrigins.has(origin)) return callback(null, true);
+    if (/^https?:\/\/(?:.+\.)?onrender\.com$/.test(origin)) return callback(null, true);
+    if (allowPrivateNetwork(origin)) return callback(null, true);
+    // Reject without throwing to avoid 500 on preflight; browser will block
+    return callback(null, false);
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  optionsSuccessStatus: 204,
 };
 app.use(cors(corsOptions));
 

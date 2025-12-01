@@ -7,6 +7,12 @@ import crypto from 'crypto';
 // ✅ Create Razorpay Order securely
 export const createOrder = async (req, res) => {
   try {
+    if (!razorpay) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payments are temporarily unavailable. Please try again later.',
+      });
+    }
     const { bookingId } = req.body;
     const userId = req.user.id.toString();
 
@@ -73,6 +79,12 @@ export const createOrder = async (req, res) => {
 // ✅ Verify Razorpay Payment Signature
 export const verifyPayment = async (req, res) => {
   try {
+    if (!razorpay) {
+      return res.status(503).json({
+        success: false,
+        message: 'Payments are temporarily unavailable. Please try again later.',
+      });
+    }
     const { bookingId, razorpayOrderId, razorpayPaymentId, razorpaySignature } = req.body;
 
     const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET);

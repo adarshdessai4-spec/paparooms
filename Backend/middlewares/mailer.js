@@ -2,11 +2,18 @@ import { Resend } from "resend";
 import dotenv from "dotenv";
 
 dotenv.config();
-const resend = new Resend(process.env.RESEND_API_KEY);
+const hasResendKey = Boolean(process.env.RESEND_API_KEY);
+const resend = hasResendKey ? new Resend(process.env.RESEND_API_KEY) : null;
+
 export const sendEmail = async ({ to, subject, html, text }) => {
+  if (!hasResendKey || !resend) {
+    console.warn("📭 RESEND_API_KEY missing; email send skipped.");
+    return false;
+  }
+
   try {
     const response = await resend.emails.send({
-      from: "OyoPlus <no-reply@oyo.plus>",
+      from: "PapRooms <no-reply@paprooms.com>",
       to,
       subject,
       html,

@@ -2,6 +2,8 @@ import crypto from "crypto";
 import User from "../models/User.js";
 import { sendEmail } from "../middlewares/mailer.js";
 
+const isProd = process.env.NODE_ENV === "production";
+
 const generateOTP = () => Math.floor(100000 + Math.random() * 900000).toString();
 const hashOTP = (otp) => crypto.createHash("sha256").update(otp).digest("hex");
 
@@ -27,9 +29,9 @@ export const sendEmailOtp = async (req, res) => {
     await user.save();
 
     // ✅ Resend Email
-    const mailStatus=await sendEmail({
+    const mailStatus = await sendEmail({
       to: user.email,
-      subject: "Verify Your Email - OYO.plus",
+      subject: "Verify Your Email - PapRooms",
       html: `
         <h2>Email Verification</h2>
         <p>Your OTP is:</p>
@@ -37,10 +39,18 @@ export const sendEmailOtp = async (req, res) => {
         <p>Valid for 10 minutes.</p>
       `,
     });
-    console.log("Email send status:", mailStatus);
+    if (!mailStatus) {
+      console.warn("Email not sent (missing API key). OTP will be returned in response for dev/testing.");
+    }
+
+    // In non-production, return OTP for local testing when email isn't sent.
+    const devPayload = !isProd && !mailStatus ? { otp } : {};
+
+    console.log("Email send status:", mailStatus ? "sent" : "skipped", devPayload);
     return res.status(200).json({
       success: true,
       message: "OTP sent to your email.",
+      ...devPayload,
     });
   } catch (err) {
     console.error("sendEmailOtp error:", err);
@@ -71,13 +81,24 @@ export const verifyEmailOtp = async (req, res) => {
     user.ownerProfile.emailVerified = true;
     user.ownerProfile.otp = undefined;
     user.role = "owner";
+    // Normalize verified flags for frontend compatibility
+    user.emailVerified = true;
+    user.isVerified = true;
+    user.verified = true;
 
     await user.save();
 
     return res.status(200).json({
       success: true,
       message: "Email verified successfully",
-      user: { id: user._id, email: user.email, role: user.role, emailVerified: true },
+      user: {
+        id: user._id,
+        email: user.email,
+        role: user.role,
+        emailVerified: true,
+        isVerified: true,
+        verified: true,
+      },
     });
   } catch (err) {
     console.error("verifyEmailOtp error:", err);
